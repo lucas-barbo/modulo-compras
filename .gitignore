@@ -5,6 +5,4 @@ __pycache__/
 *.pyc
 *.db
 .env
-.agents/
-.codex/
 .gitignore
