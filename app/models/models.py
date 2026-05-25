@@ -1,10 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Column, Integer, String, Numeric, DateTime, Date, Text, ForeignKey
 )
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
+
+
+def utc_now():
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class Fornecedor(Base):
@@ -32,7 +36,7 @@ class SolicitacaoCompra(Base):
     produto_nome  = Column(String(255), nullable=False)
     quantidade    = Column(Numeric(15, 2), nullable=False)
     justificativa = Column(Text, nullable=False)
-    criado_em     = Column(DateTime, nullable=False, default=datetime.utcnow)
+    criado_em     = Column(DateTime, nullable=False, default=utc_now)
 
     cotacoes = relationship("Cotacao", back_populates="solicitacao")
 
@@ -50,7 +54,7 @@ class Cotacao(Base):
     quantidade = Column(Numeric(15, 2), nullable=False)
     status = Column(String(10), nullable=False, default="pendente",
                             comment="pendente | aprovada | recusada")
-    criado_em = Column(DateTime, nullable=False, default=datetime.utcnow)
+    criado_em = Column(DateTime, nullable=False, default=utc_now)
 
     solicitacao = relationship("SolicitacaoCompra", back_populates="cotacoes")
     fornecedor = relationship("Fornecedor", back_populates="cotacoes")
@@ -71,11 +75,12 @@ class OrdemCompra(Base):
     cotacao_id = Column(Integer, ForeignKey("cotacoes.id"), nullable=False)
     fornecedor_id = Column(Integer, ForeignKey("fornecedores.id"), nullable=False)
     valor_total = Column(Numeric(15, 2), nullable=False)
+    quantidade_recebida = Column(Numeric(15, 2), nullable=False, default=0)
     status = Column(String(10), nullable=False, default="aberta",
                            comment="aberta | parcial | encerrada | cancelada")
     data_emissao  = Column(Date, nullable=False)
     data_previsao = Column(Date, nullable=True)
-    criado_em = Column(DateTime, nullable=False, default=datetime.utcnow)
+    criado_em = Column(DateTime, nullable=False, default=utc_now)
 
     cotacao = relationship("Cotacao", back_populates="ordem_compra")
     fornecedor = relationship("Fornecedor", back_populates="ordens_compra")
@@ -94,7 +99,7 @@ class HistoricoStatusOC(Base):
     status_anterior = Column(String(10), nullable=True,
                              comment="aberta | parcial | encerrada | cancelada")
     status_novo = Column(String(10), nullable=False)
-    alterado_em = Column(DateTime, nullable=False, default=datetime.utcnow)
+    alterado_em = Column(DateTime, nullable=False, default=utc_now)
 
     ordem_compra = relationship("OrdemCompra", back_populates="historico")
 

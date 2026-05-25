@@ -1,0 +1,1548 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Modulo Compras",
+    "description": "Microserviço de compras do ERP responsável por fornecedores, solicitações, cotações e ordens de compra.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Verificar saúde do módulo",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/fornecedores": {
+      "get": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Listar fornecedores",
+        "operationId": "list_fornecedores_compras_fornecedores_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FornecedorListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Cadastrar fornecedor",
+        "operationId": "create_fornecedor_compras_fornecedores_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FornecedorCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FornecedorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/fornecedores/{fornecedor_id}": {
+      "get": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Detalhar fornecedor",
+        "operationId": "get_fornecedor_compras_fornecedores__fornecedor_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fornecedor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Fornecedor Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FornecedorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Atualizar fornecedor",
+        "operationId": "update_fornecedor_compras_fornecedores__fornecedor_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fornecedor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Fornecedor Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FornecedorUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FornecedorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Excluir fornecedor",
+        "operationId": "delete_fornecedor_compras_fornecedores__fornecedor_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fornecedor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Fornecedor Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/solicitacoes": {
+      "get": {
+        "tags": [
+          "Solicitações"
+        ],
+        "summary": "Listar solicitações",
+        "operationId": "list_solicitacoes_compras_solicitacoes_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitacaoListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Solicitações"
+        ],
+        "summary": "Criar solicitação de compra",
+        "operationId": "create_solicitacao_compras_solicitacoes_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitacaoCompraCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitacaoCompraResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/cotacoes": {
+      "get": {
+        "tags": [
+          "Cotações"
+        ],
+        "summary": "Listar cotações",
+        "operationId": "list_cotacoes_compras_cotacoes_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Size"
+            }
+          },
+          {
+            "name": "status_filtro",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status Filtro"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CotacaoListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cotações"
+        ],
+        "summary": "Registrar cotação",
+        "operationId": "create_cotacao_compras_cotacoes_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotacaoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CotacaoResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/cotacoes/{cotacao_id}/aprovar": {
+      "post": {
+        "tags": [
+          "Cotações"
+        ],
+        "summary": "Aprovar cotação e gerar ordem de compra",
+        "operationId": "approve_cotacao_compras_cotacoes__cotacao_id__aprovar_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cotacao_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cotacao Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdemCompraDetalheResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/ordens": {
+      "get": {
+        "tags": [
+          "Ordens de Compra"
+        ],
+        "summary": "Listar ordens de compra",
+        "operationId": "list_ordens_compras_ordens_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Size"
+            }
+          },
+          {
+            "name": "status_filtro",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status Filtro"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdemCompraListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/ordens/{ordem_id}": {
+      "get": {
+        "tags": [
+          "Ordens de Compra"
+        ],
+        "summary": "Detalhar ordem de compra",
+        "operationId": "get_ordem_compras_ordens__ordem_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ordem_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Ordem Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdemCompraDetalheResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compras/ordens/{ordem_id}/receber": {
+      "post": {
+        "tags": [
+          "Ordens de Compra"
+        ],
+        "summary": "Registrar recebimento da ordem de compra",
+        "operationId": "receive_order_compras_ordens__ordem_id__receber_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ordem_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Ordem Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceberOrdemCompraRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceberOrdemCompraResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CotacaoCreate": {
+        "properties": {
+          "solicitacao_id": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "title": "Solicitacao Id"
+          },
+          "fornecedor_id": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "title": "Fornecedor Id"
+          },
+          "preco_unitario": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Preco Unitario"
+          },
+          "quantidade": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantidade",
+            "description": "Se omitida, assume a quantidade da solicitação."
+          }
+        },
+        "type": "object",
+        "required": [
+          "solicitacao_id",
+          "fornecedor_id",
+          "preco_unitario"
+        ],
+        "title": "CotacaoCreate"
+      },
+      "CotacaoListResponse": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CotacaoResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "size",
+          "total",
+          "pages",
+          "items"
+        ],
+        "title": "CotacaoListResponse"
+      },
+      "CotacaoResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "solicitacao_id": {
+            "type": "integer",
+            "title": "Solicitacao Id"
+          },
+          "fornecedor_id": {
+            "type": "integer",
+            "title": "Fornecedor Id"
+          },
+          "fornecedor_nome": {
+            "type": "string",
+            "title": "Fornecedor Nome"
+          },
+          "produto_nome": {
+            "type": "string",
+            "title": "Produto Nome"
+          },
+          "preco_unitario": {
+            "type": "string",
+            "title": "Preco Unitario"
+          },
+          "quantidade": {
+            "type": "string",
+            "title": "Quantidade"
+          },
+          "valor_total": {
+            "type": "string",
+            "title": "Valor Total"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "criado_em": {
+            "type": "string",
+            "title": "Criado Em"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "solicitacao_id",
+          "fornecedor_id",
+          "fornecedor_nome",
+          "produto_nome",
+          "preco_unitario",
+          "quantidade",
+          "valor_total",
+          "status",
+          "criado_em"
+        ],
+        "title": "CotacaoResponse"
+      },
+      "FornecedorCreate": {
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "maxLength": 18,
+            "minLength": 14,
+            "title": "Cnpj",
+            "examples": [
+              "12.345.678/0001-99"
+            ]
+          },
+          "razao_social": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "Razao Social"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "prazo_entrega": {
+            "type": "integer",
+            "maximum": 365,
+            "minimum": 0,
+            "title": "Prazo Entrega"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cnpj",
+          "razao_social",
+          "prazo_entrega"
+        ],
+        "title": "FornecedorCreate"
+      },
+      "FornecedorListResponse": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FornecedorResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "size",
+          "total",
+          "pages",
+          "items"
+        ],
+        "title": "FornecedorListResponse"
+      },
+      "FornecedorResponse": {
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "maxLength": 18,
+            "minLength": 14,
+            "title": "Cnpj",
+            "examples": [
+              "12.345.678/0001-99"
+            ]
+          },
+          "razao_social": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "Razao Social"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "prazo_entrega": {
+            "type": "integer",
+            "maximum": 365,
+            "minimum": 0,
+            "title": "Prazo Entrega"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cnpj",
+          "razao_social",
+          "prazo_entrega",
+          "id"
+        ],
+        "title": "FornecedorResponse"
+      },
+      "FornecedorUpdate": {
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "maxLength": 18,
+            "minLength": 14,
+            "title": "Cnpj",
+            "examples": [
+              "12.345.678/0001-99"
+            ]
+          },
+          "razao_social": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "Razao Social"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "prazo_entrega": {
+            "type": "integer",
+            "maximum": 365,
+            "minimum": 0,
+            "title": "Prazo Entrega"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cnpj",
+          "razao_social",
+          "prazo_entrega"
+        ],
+        "title": "FornecedorUpdate"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HistoricoStatusResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "status_anterior": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Anterior"
+          },
+          "status_novo": {
+            "type": "string",
+            "title": "Status Novo"
+          },
+          "alterado_em": {
+            "type": "string",
+            "title": "Alterado Em"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status_anterior",
+          "status_novo",
+          "alterado_em"
+        ],
+        "title": "HistoricoStatusResponse"
+      },
+      "IntegracaoResponse": {
+        "properties": {
+          "estoque": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Estoque"
+          },
+          "financeiro": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Financeiro"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estoque",
+          "financeiro"
+        ],
+        "title": "IntegracaoResponse"
+      },
+      "OrdemCompraDetalheResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "numero": {
+            "type": "string",
+            "title": "Numero"
+          },
+          "cotacao_id": {
+            "type": "integer",
+            "title": "Cotacao Id"
+          },
+          "fornecedor_id": {
+            "type": "integer",
+            "title": "Fornecedor Id"
+          },
+          "fornecedor_nome": {
+            "type": "string",
+            "title": "Fornecedor Nome"
+          },
+          "solicitacao_id": {
+            "type": "integer",
+            "title": "Solicitacao Id"
+          },
+          "id_produto": {
+            "type": "integer",
+            "title": "Id Produto"
+          },
+          "produto_nome": {
+            "type": "string",
+            "title": "Produto Nome"
+          },
+          "quantidade_solicitada": {
+            "type": "string",
+            "title": "Quantidade Solicitada"
+          },
+          "quantidade_recebida": {
+            "type": "string",
+            "title": "Quantidade Recebida"
+          },
+          "quantidade_pendente": {
+            "type": "string",
+            "title": "Quantidade Pendente"
+          },
+          "valor_total": {
+            "type": "string",
+            "title": "Valor Total"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "data_emissao": {
+            "type": "string",
+            "title": "Data Emissao"
+          },
+          "data_previsao": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Previsao"
+          },
+          "criado_em": {
+            "type": "string",
+            "title": "Criado Em"
+          },
+          "historico": {
+            "items": {
+              "$ref": "#/components/schemas/HistoricoStatusResponse"
+            },
+            "type": "array",
+            "title": "Historico"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "numero",
+          "cotacao_id",
+          "fornecedor_id",
+          "fornecedor_nome",
+          "solicitacao_id",
+          "id_produto",
+          "produto_nome",
+          "quantidade_solicitada",
+          "quantidade_recebida",
+          "quantidade_pendente",
+          "valor_total",
+          "status",
+          "data_emissao",
+          "data_previsao",
+          "criado_em",
+          "historico"
+        ],
+        "title": "OrdemCompraDetalheResponse"
+      },
+      "OrdemCompraListResponse": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OrdemCompraResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "size",
+          "total",
+          "pages",
+          "items"
+        ],
+        "title": "OrdemCompraListResponse"
+      },
+      "OrdemCompraResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "numero": {
+            "type": "string",
+            "title": "Numero"
+          },
+          "cotacao_id": {
+            "type": "integer",
+            "title": "Cotacao Id"
+          },
+          "fornecedor_id": {
+            "type": "integer",
+            "title": "Fornecedor Id"
+          },
+          "fornecedor_nome": {
+            "type": "string",
+            "title": "Fornecedor Nome"
+          },
+          "solicitacao_id": {
+            "type": "integer",
+            "title": "Solicitacao Id"
+          },
+          "id_produto": {
+            "type": "integer",
+            "title": "Id Produto"
+          },
+          "produto_nome": {
+            "type": "string",
+            "title": "Produto Nome"
+          },
+          "quantidade_solicitada": {
+            "type": "string",
+            "title": "Quantidade Solicitada"
+          },
+          "quantidade_recebida": {
+            "type": "string",
+            "title": "Quantidade Recebida"
+          },
+          "quantidade_pendente": {
+            "type": "string",
+            "title": "Quantidade Pendente"
+          },
+          "valor_total": {
+            "type": "string",
+            "title": "Valor Total"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "data_emissao": {
+            "type": "string",
+            "title": "Data Emissao"
+          },
+          "data_previsao": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Previsao"
+          },
+          "criado_em": {
+            "type": "string",
+            "title": "Criado Em"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "numero",
+          "cotacao_id",
+          "fornecedor_id",
+          "fornecedor_nome",
+          "solicitacao_id",
+          "id_produto",
+          "produto_nome",
+          "quantidade_solicitada",
+          "quantidade_recebida",
+          "quantidade_pendente",
+          "valor_total",
+          "status",
+          "data_emissao",
+          "data_previsao",
+          "criado_em"
+        ],
+        "title": "OrdemCompraResponse"
+      },
+      "ReceberOrdemCompraRequest": {
+        "properties": {
+          "quantidade_recebida": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Quantidade Recebida"
+          },
+          "nota_fiscal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nota Fiscal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "quantidade_recebida"
+        ],
+        "title": "ReceberOrdemCompraRequest"
+      },
+      "ReceberOrdemCompraResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "ordem": {
+            "$ref": "#/components/schemas/OrdemCompraDetalheResponse"
+          },
+          "integracoes": {
+            "$ref": "#/components/schemas/IntegracaoResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "ordem",
+          "integracoes"
+        ],
+        "title": "ReceberOrdemCompraResponse"
+      },
+      "SolicitacaoCompraCreate": {
+        "properties": {
+          "id_produto": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "title": "Id Produto",
+            "description": "ID do produto no módulo de estoque"
+          },
+          "produto_nome": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 2,
+            "title": "Produto Nome"
+          },
+          "quantidade": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Quantidade"
+          },
+          "justificativa": {
+            "type": "string",
+            "minLength": 5,
+            "title": "Justificativa"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_produto",
+          "produto_nome",
+          "quantidade",
+          "justificativa"
+        ],
+        "title": "SolicitacaoCompraCreate"
+      },
+      "SolicitacaoCompraResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "id_produto": {
+            "type": "integer",
+            "title": "Id Produto"
+          },
+          "produto_nome": {
+            "type": "string",
+            "title": "Produto Nome"
+          },
+          "quantidade": {
+            "type": "string",
+            "title": "Quantidade"
+          },
+          "justificativa": {
+            "type": "string",
+            "title": "Justificativa"
+          },
+          "criado_em": {
+            "type": "string",
+            "title": "Criado Em"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "id_produto",
+          "produto_nome",
+          "quantidade",
+          "justificativa",
+          "criado_em"
+        ],
+        "title": "SolicitacaoCompraResponse"
+      },
+      "SolicitacaoListResponse": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SolicitacaoCompraResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "size",
+          "total",
+          "pages",
+          "items"
+        ],
+        "title": "SolicitacaoListResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+"""Configurações e dependências compartilhadas."""

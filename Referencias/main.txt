@@ -1,0 +1,116 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from .models.models import Base, Fornecedor, SolicitacaoCompra, Cotacao, OrdemCompra
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+import os
+
+# Configuração do Banco de Dados SQLite
+DB_PATH = os.path.join(os.path.dirname(__file__), 'compras_v2.db')
+engine = create_engine(f'sqlite:///{DB_PATH}', connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+def init_db():
+    Base.metadata.create_all(bind=engine)
+
+app = Flask(__name__)
+CORS(app)
+
+# Dependência para obter a sessão do banco
+def get_db():
+    db = SessionLocal()
+    try:
+        return db
+    finally:
+        db.close()
+
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        "modulo": "Compras (v2)",
+        "status": "online",
+        "database": "SQLAlchemy/SQLite"
+    })
+
+# --- Endpoints para FORNECEDORES ---
+@app.route('/fornecedores', methods=['GET'])
+def get_fornecedores():
+    db = get_db()
+    fornecedores = db.query(Fornecedor).all()
+    resultado = []
+    for f in fornecedores:
+        resultado.append({
+            "id": f.id,
+            "cnpj": f.cnpj,
+            "razao_social": f.razao_social,
+            "email": f.email,
+            "prazo_entrega": f.prazo_entrega
+        })
+    return jsonify(resultado)
+
+@app.route('/fornecedores', methods=['POST'])
+def add_fornecedor():
+    dados = request.json
+    db = get_db()
+    novo_f = Fornecedor(
+        cnpj=dados.get('cnpj'),
+        razao_social=dados.get('razao_social'),
+        email=dados.get('email'),
+        prazo_entrega=dados.get('prazo_entrega')
+    )
+    db.add(novo_f)
+    db.commit()
+    db.refresh(novo_f)
+    return jsonify({"mensagem": "Fornecedor cadastrado", "id": novo_f.id}), 201
+
+# --- Endpoints para SOLICITAÇÕES ---
+@app.route('/solicitacoes', methods=['GET'])
+def get_solicitacoes():
+    db = get_db()
+    solicitacoes = db.query(SolicitacaoCompra).all()
+    resultado = []
+    for s in solicitacoes:
+        resultado.append({
+            "id": s.id,
+            "produto_nome": s.produto_nome,
+            "quantidade": float(s.quantidade),
+            "justificativa": s.justificativa,
+            "criado_em": s.criado_em.isoformat()
+        })
+    return jsonify(resultado)
+
+@app.route('/solicitacoes', methods=['POST'])
+def receber_solicitacao():
+    dados = request.json
+    db = get_db()
+    nova_s = SolicitacaoCompra(
+        id_produto=dados.get('id_produto'),
+        produto_nome=dados.get('produto_nome'),
+        quantidade=dados.get('quantidade'),
+        justificativa=dados.get('justificativa')
+    )
+    db.add(nova_s)
+    db.commit()
+    db.refresh(nova_s)
+    return jsonify({"mensagem": "Solicitação recebida", "id": nova_s.id}), 201
+
+# --- Endpoints para ORDENS DE COMPRA ---
+@app.route('/ordens', methods=['GET'])
+def get_ordens():
+    db = get_db()
+    ordens = db.query(OrdemCompra).all()
+    resultado = []
+    for o in ordens:
+        resultado.append({
+            "id": o.id,
+            "fornecedor": o.fornecedor.razao_social,
+            "valor_total": float(o.valor_total),
+            "status": o.status,
+            "data_emissao": o.data_emissao.isoformat()
+        })
+    return jsonify(resultado)
+
+if __name__ == '__main__':
+    init_db()
+    app.run(host='0.0.0.0', port=5000, debug=True)
